@@ -273,7 +273,7 @@ logical,save                      :: G_OPTIONS_ONLY            ! process respons
 logical,save                      :: G_RESPONSE                ! allow @name abbreviations
 character(len=:),allocatable,save :: G_RESPONSE_IGNORED
 character(len=:),allocatable,save :: G_RESPONSE_PREFIX
-class(*), allocatable             :: gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi, gxj
+class(*)             :: gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi, gxj
 
 
 ! return allocatable arrays
@@ -2188,11 +2188,11 @@ character(len=:),allocatable :: temp
          call split(temp,array) ! get first word
          itrim=len_trim(array(1))+2
          temp=temp(itrim:)
-
-         PROCESS: select case(lower(array(1)))
+      PROCESS: block
+         select case(lower(array(1)))
          case('comment','#','')
          case('system','!','$')
-            if(G_options_only)exit PROCESS
+            if(G_options_only) exit PROCESS
             lines_processed= lines_processed+1
             ! call execute_command_line(temp)
          case('options','option','-')
@@ -2226,7 +2226,8 @@ character(len=:),allocatable :: temp
                lines_processed= lines_processed+1
                write(*,'(*(g0))')'unknown response keyword [',array(1),'] with options of [',trim(temp),']'
             endif
-         end select PROCESS
+         end select 
+      end block PROCESS
 
       endif
    enddo INFINITE
@@ -4787,9 +4788,10 @@ integer           :: ierr
 
   out_baseten=0
   y=0.0
-  ALL: if(basein_local<2.or.basein_local>36) then
+ALL: block
+  if(basein_local<2.or.basein_local>36) then
     print *,'(*decodebase* ERROR: Base must be between 2 and 36. base=',basein_local
-  else ALL
+  else
      out_baseten=0;y=0.0; mult=1.0
      long=LEN_TRIM(string_local)
      do i=1, long
@@ -4819,7 +4821,8 @@ integer           :: ierr
      enddo
      decodebase=.true.
      out_baseten=nint(out_sign*y)*sign(1,basein)
-  endif ALL
+  endif 
+end block ALL
 end function decodebase
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
