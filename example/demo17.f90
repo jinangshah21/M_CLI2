@@ -30,9 +30,9 @@ type(character(len=:)),allocatable  :: fnames(:)
 
    call parse() !! Define and parse command line
    !! Get argument values 
-   call get_args('x',x,'y',y,'z',z)
-   call get_args('i',i,'j',j,'k',k)
-   call get_args('l',l,'m',m,'n',n)
+   ! call get_args('x',x,'y',y,'z',z)
+   ! call get_args('i',i,'j',j,'k',k)
+   ! call get_args('l',l,'m',m,'n',n)
    title=sget('title')
 
    !! All done cracking the command line use the values in your program.

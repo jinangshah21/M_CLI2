@@ -13,8 +13,8 @@ character(len=:),allocatable :: title
    call set_args('-x 1 -y 10 --size 12.34567  -l F --title "my title"')
 
    ! get the values
-   call get_args('x',x, 'y',y,'l',l, 'size',size) ! all the non-allocatables
-   call get_args('title',title) ! do allocatables one at a time
+   ! call get_args('x',x, 'y',y,'l',l, 'size',size) ! all the non-allocatables
+   ! call get_args('title',title) ! do allocatables one at a time
 
    ! Done. All variables set and of the requested type
    write(*,'(*("[",g0,"]":,1x))')x,y,size,l,title

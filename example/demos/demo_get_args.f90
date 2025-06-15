@@ -19,11 +19,11 @@
          & ')
        ! Assign values to elements
        ! Scalars
-      call get_args( 'x',x, 'y',y, 'z',z, 'l',l, 'L',lbig )
-       ! Allocatable string
-      call get_args('title',title)
-       ! Allocatable arrays
-      call get_args('p',p)
+      ! call get_args( 'x',x, 'y',y, 'z',z, 'l',l, 'L',lbig )
+      !  ! Allocatable string
+      ! call get_args('title',title)
+      !  ! Allocatable arrays
+      ! call get_args('p',p)
        ! Use values
       write(*,'(1x,g0,"=",g0)')'x',x, 'y',y, 'z',z
       write(*,*)'p=',p
