@@ -273,6 +273,8 @@ logical,save                      :: G_OPTIONS_ONLY            ! process respons
 logical,save                      :: G_RESPONSE                ! allow @name abbreviations
 character(len=:),allocatable,save :: G_RESPONSE_IGNORED
 character(len=:),allocatable,save :: G_RESPONSE_PREFIX
+class(*), allocatable             :: gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi, gxj
+
 
 ! return allocatable arrays
 interface  get_args;  module  procedure  get_anyarray_d;  end interface  ! any size array
@@ -420,7 +422,7 @@ integer                              :: iback
    if(present(help_text))then
       if(get('help') == 'T')then
          do i=1,size(help_text)
-            call journal(help_text(i))
+            call journal(help_text(i), gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
          enddo
          call mystop(1,'displayed help text')
          return
@@ -443,7 +445,7 @@ integer                              :: iback
          do i=1,size(version_text)
             !xINTEL BUG*!call journal(version_text(i)(istart:len_trim(version_text(i))-iback))
             line=version_text(i)(istart:len_trim(version_text(i))-iback)
-            call journal(line)
+            call journal(line, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
          enddo
          call mystop(3,'displayed version text')
          return
@@ -453,7 +455,7 @@ integer                              :: iback
       if(G_QUIET)then
          G_STOP_MESSAGE = 'no version text'
       else
-         call journal('*check_commandline* no version text')
+         call journal('*check_commandline* no version text', gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       endif
       call mystop(4,'displayed default version text')
       return
@@ -469,7 +471,7 @@ integer :: ilength
    G_passed_in=G_passed_in//repeat(' ',len(G_passed_in))
    G_passed_in=replace_str(G_passed_in, ' --', NEW_LINE('A')//' --')
    if(.not.G_QUIET)then
-      call journal(cmd_name,G_passed_in) ! no help text, echo command and default options
+      call journal(cmd_name,G_passed_in, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi) ! no help text, echo command and default options
    endif
    deallocate(cmd_name)
 end subroutine default_help
@@ -2192,7 +2194,7 @@ character(len=:),allocatable :: temp
          case('system','!','$')
             if(G_options_only)exit PROCESS
             lines_processed= lines_processed+1
-            call execute_command_line(temp)
+            ! call execute_command_line(temp)
          case('options','option','-')
             lines_processed= lines_processed+1
             prototype=prototype//' '//trim(temp)
@@ -3156,7 +3158,7 @@ integer                      :: iichar                     ! point to first char
       val=values(place)(:counts(place))
       call split(adjustl(upper(val)),carray,delimiters=delimiters)  ! convert value to uppercase, trimmed; then parse into array
    else
-      call journal('*get_anyarray_l* unknown keyword',keyword)
+      call journal('*get_anyarray_l* unknown keyword',keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh)
       call mystop(8 ,'*get_anyarray_l* unknown keyword '//keyword)
       if(allocated(larray))deallocate(larray)
       allocate(larray(0))
@@ -3176,7 +3178,7 @@ integer                      :: iichar                     ! point to first char
          case('T','Y',' '); larray(i)=.true.               ! anything starting with "T" or "Y" or a blank is TRUE (true,yes,...)
          case('F','N');     larray(i)=.false.              ! assume this is false or no
          case default
-            call journal("*get_anyarray_l* bad logical expression for ",(keyword),'=',carray(i))
+            call journal("*get_anyarray_l* bad logical expression for ",(keyword),'=',carray(i), gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf)
          end select
       enddo
    else                                                       ! for a blank string return one T
@@ -3207,7 +3209,7 @@ character(len=:),allocatable          :: val
       val=replace_str(val,')','')
       call split(val,carray,delimiters=delimiters)    ! find value associated with keyword and split it into an array
    else
-      call journal('*get_anyarray_d* unknown keyword '//keyword)
+      call journal('*get_anyarray_d* unknown keyword '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(9 ,'*get_anyarray_d* unknown keyword '//keyword)
       if(allocated(darray))deallocate(darray)
       allocate(darray(0))
@@ -3251,7 +3253,7 @@ integer                              :: half,sz,i
    sz=size(darray)
    half=sz/2
    if(sz /= half+half)then
-      call journal('*get_anyarray_x* uneven number of values defining complex value '//keyword)
+      call journal('*get_anyarray_x* uneven number of values defining complex value '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(11,'*get_anyarray_x* uneven number of values defining complex value '//keyword)
       if(allocated(xarray))deallocate(xarray)
       allocate(xarray(0))
@@ -3283,7 +3285,7 @@ character(len=:),allocatable         :: val
       val=unquote(values(place)(:counts(place)))
       call split(val,strings,delimiters=delimiters)   ! find value associated with keyword and split it into an array
    else
-      call journal('*get_anyarray_c* unknown keyword '//keyword)
+      call journal('*get_anyarray_c* unknown keyword '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(12,'*get_anyarray_c* unknown keyword '//keyword)
       if(allocated(strings))deallocate(strings)
       allocate(character(len=0)::strings(0))
@@ -3310,14 +3312,14 @@ integer                              :: ibug
          strings=strings_a
       else
          ibug=len(strings)
-         call journal('*get_args_fixed_length_a_array* values too long. Longest is',len(strings_a),'allowed is',ibug)
+         call journal('*get_args_fixed_length_a_array* values too long. Longest is',len(strings_a),'allowed is',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf)
          write(*,'("strings=",3x,*(a,1x))')strings
-         call journal('*get_args_fixed_length_a_array* keyword='//keyword)
+         call journal('*get_args_fixed_length_a_array* keyword='//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
          call mystop(13,'*get_args_fixed_length_a_array* keyword='//keyword)
          strings=[character(len=len(strings)) ::]
       endif
    else
-      call journal('*get_args_fixed_length_a_array* unknown keyword '//keyword)
+      call journal('*get_args_fixed_length_a_array* unknown keyword '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(14,'*get_args_fixed_length_a_array* unknown keyword '//keyword)
       strings=[character(len=len(strings)) ::]
    endif
@@ -3338,7 +3340,7 @@ integer                              :: ibug
       iarray=nint(darray)
    else
       ibug=size(iarray)
-      call journal('*get_fixedarray_i* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug)
+      call journal('*get_fixedarray_i* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd)
       call print_dictionary_usage()
       call mystop(33)
       iarray=0
@@ -3358,7 +3360,7 @@ integer                              :: ibug
       rarray=darray
    else
       ibug=size(rarray)
-      call journal('*get_fixedarray_r* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug)
+      call journal('*get_fixedarray_r* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd)
       call print_dictionary_usage()
       call mystop(33)
       rarray=0.0
@@ -3378,7 +3380,7 @@ integer                              :: ibug
    sz=dsize*2
    half=sz/2
    if(sz /= half+half)then
-      call journal('*get_fixed_size_complex* uneven number of values defining complex value '//keyword)
+      call journal('*get_fixed_size_complex* uneven number of values defining complex value '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(15,'*get_fixed_size_complex* uneven number of values defining complex value '//keyword)
       xarray=0
       return
@@ -3387,7 +3389,7 @@ integer                              :: ibug
       xarray=darray
    else
       ibug=size(xarray)
-      call journal('*get_fixed_size_complex* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug)
+      call journal('*get_fixed_size_complex* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd)
       call print_dictionary_usage()
       call mystop(34)
       xarray=cmplx(0.0,0.0)
@@ -3407,7 +3409,7 @@ integer                              :: ibug
       darr=darray
    else
       ibug=size(darr)
-      call journal('*get_fixedarray_d* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug)
+      call journal('*get_fixedarray_d* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd)
       call print_dictionary_usage()
       call mystop(35)
       darr=0.0d0
@@ -3427,7 +3429,7 @@ integer                              :: ibug
       larray=darray
    else
       ibug=size(larray)
-      call journal('*get_fixedarray_l* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug)
+      call journal('*get_fixedarray_l* wrong number of values for keyword',keyword,'got',dsize,'expected',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd)
       call print_dictionary_usage()
       call mystop(36)
       larray=.false.
@@ -3457,13 +3459,13 @@ character(len=:),allocatable         :: val
       else
          ibug=size(strings)
          call journal('*get_fixedarray_fixed_length_c* wrong number of values for keyword',&
-            & keyword,'got',ssize,'expected ',ibug) !,ubound(strings,dim=1)
+            & keyword,'got',ssize,'expected ',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd) !,ubound(strings,dim=1)
          call print_dictionary_usage()
          call mystop(30,'*get_fixedarray_fixed_length_c* unknown keyword '//keyword)
          strings=''
       endif
    else
-      call journal('*get_fixedarray_fixed_length_c* unknown keyword '//keyword)
+      call journal('*get_fixedarray_fixed_length_c* unknown keyword '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(16,'*get_fixedarray_fixed_length_c* unknown keyword '//keyword)
       strings=''
    endif
@@ -3481,7 +3483,7 @@ integer                       :: ibug
       d=darray(1)
    else
       ibug=size(darray)
-      call journal('*get_anyarray_d* incorrect number of values for keyword "',keyword,'" expected one found',ibug)
+      call journal('*get_anyarray_d* incorrect number of values for keyword "',keyword,'" expected one found',ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf)
       call print_dictionary_usage()
       call mystop(31,'*get_anyarray_d* incorrect number of values for keyword "'//keyword//'" expected one')
    endif
@@ -3515,7 +3517,7 @@ integer                       :: place
    if (place > 0) then                                  ! if index is valid return string
       string = unquote(values(place) (:counts(place)))
    else
-      call journal('*get_anyarray_c* unknown keyword '//keyword)
+      call journal('*get_anyarray_c* unknown keyword '//keyword, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(17, '*get_anyarray_c* unknown keyword '//keyword)
       string = ''
    endif
@@ -3544,7 +3546,7 @@ integer                       :: ibug
    if (unlen > len(string)) then
       ibug = len(string)
       call journal('*get_args_fixed_length_scalar_c* value too long for', keyword, 'allowed is', ibug,&
-      & 'input string [', values(place), '] is', unlen)
+      & 'input string [', values(place), '] is', unlen, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb)
       call mystop(19, '*get_args_fixed_length_scalar_c* value too long')
       string = ''
    endif
@@ -3572,13 +3574,13 @@ integer                       :: ibug
    call get_anyarray_l(keyword, larray)
 
    if (.not. allocated(larray)) then
-      call journal('*get_scalar_logical* expected one value found not allocated')
+      call journal('*get_scalar_logical* expected one value found not allocated', gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       call mystop(37, '*get_scalar_logical* incorrect number of values for keyword "'//keyword//'"')
    elseif (size(larray) == 1) then
       l = larray(1)
    else
       ibug = size(larray)
-      call journal('*get_scalar_logical* expected one value found', ibug)
+      call journal('*get_scalar_logical* expected one value found', ibug, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh)
       call mystop(21, '*get_scalar_logical* incorrect number of values for keyword "'//keyword//'"')
    endif
 
@@ -3854,7 +3856,7 @@ integer,parameter           :: ihuge=huge(0)
       if (valu8 <= huge(valu)) then
          valu = int(valu8)
       else
-         call journal('*a2i*', '- value too large', valu8, '>', ihuge)
+         call journal('*a2i*', '- value too large', valu8, '>', ihuge, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe)
          valu = huge(valu)
          ierr = -1
       endif
@@ -3936,9 +3938,9 @@ character(len=3),save        :: nan_string='NaN'
          read(nan_string,'(f3.3)')valu
       endif
       if(local_chars /= 'eod')then                           ! print warning message except for special value "eod"
-         call journal('*a2d* - cannot produce number from string ['//trim(chars)//']')
+         call journal('*a2d* - cannot produce number from string ['//trim(chars)//']', gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
          if(msg /= '')then
-            call journal('*a2d* - ['//trim(msg)//']')
+            call journal('*a2d* - ['//trim(msg)//']', gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
          endif
       endif
    endif
@@ -4520,7 +4522,7 @@ character(len=20)                    :: local_mode
    case('escape')
       quoted_str=double_quote//trim(replace_str(quoted_str,'"','\"'))//double_quote
    case default
-      call journal('*quote* ERROR: unknown quote mode ',local_mode)
+      call journal('*quote* ERROR: unknown quote mode ',local_mode, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh)
       quoted_str=str
    end select
 
@@ -5605,7 +5607,7 @@ character,allocatable :: hold
       case('T','Y',' '); lg(i)=.true.          ! anything starting with "T" or "Y" or a blank is TRUE (true,yes,...)
       case('F','N');     lg(i)=.false.         ! assume this is false or no
       case default
-         call journal("*lg* bad logical expression for element",i,'=',hold)
+         call journal("*lg* bad logical expression for element",i,'=',hold, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf)
       end select
    enddo
 end function lg
@@ -5649,7 +5651,7 @@ subroutine mystop(sig,msg)
 integer,intent(in) :: sig
 character(len=*),intent(in),optional :: msg
    if(sig < 0)then
-      if(present(msg))call journal(msg)
+      if(present(msg))call journal(msg, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
       stop 1
    elseif(.not.G_QUIET)then
       stop
@@ -5859,7 +5861,7 @@ character(len=:),allocatable  :: debug_mode
    case('strict');                        G_STRICT=local_mode
    case('lastonly');                      G_APPEND=.not.local_mode
    case default
-      call journal('*set_mode* unknown key name ',key)
+      call journal('*set_mode* unknown key name ',key, gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh)
    end select
 
    if(G_DEBUG)write(*,gen)'<DEBUG>SET_MODE:END'
