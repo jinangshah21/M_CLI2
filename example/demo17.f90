@@ -15,7 +15,7 @@ use M_CLI2,  only : sget, lget, iget, rget, dget, cget
 use M_CLI2,  only : sgets, lgets, igets, rgets, dgets, cgets
 use M_CLI2,  only : filenames=>unnamed
 implicit none
-type(character(len=*)),parameter    :: all='(*(g0))'
+character(len=*),parameter    :: all='(*(g0))'
 type(integer)                       :: indx
 
 !! argument values to set
