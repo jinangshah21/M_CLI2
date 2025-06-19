@@ -17,7 +17,7 @@ character(len=*),parameter :: pairs='(1("[",g0,"=",g0,"]":,1x))'
    ! GET THE VALUES
    ! only fixed scalar values (including only character variables that
    ! are fixed length) may be combined in one GET_ARGS(3f) call
-   call get_args('x',x, 'y',y, 'l',l, 'size',size, 'title',title)
+   ! call get_args('x',x, 'y',y, 'l',l, 'size',size, 'title',title)
 
    ! USE THE VALUES
    write(*,fmt=pairs)'X',x,'Y',y,'size',size,'L',l,'TITLE',title

@@ -5882,7 +5882,7 @@ subroutine print_dictionary_usage()
                                 &'strict=', G_STRICT,&
                                 &'lastonly=', G_APPEND,&
                                 &'NODASHUNDER=', G_NODASHUNDER,&
-                                &'debug=', G_DEBUG) )
+                                &'debug=', G_DEBUG, gx0, gx1, gx2, gx4) )
    else
       call print_dictionary('USAGE:')
    endif

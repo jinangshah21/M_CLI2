@@ -36,7 +36,7 @@
               & ')
        ! Assign values to elements using G_ARGS(3f).
        ! non-allocatable scalars can be done up to twenty per call
-      call get_args('x',x, 'y',y, 'z',z, 'l',l, 'L',lbig)
+      ! call get_args('x',x, 'y',y, 'z',z, 'l',l, 'L',lbig)
        ! As a convenience multiple pairs of keywords and variables may be
        ! specified if and only if all the values are scalars and the CHARACTER
        ! variables are fixed-length or pre-allocated.
@@ -48,9 +48,9 @@
        ! GET_ARGS_FIXED_SIZE(3f).
        !
        ! allocatables should be done one at a time
-      call get_args('title',title) ! allocatable string
-      call get_args('point',point) ! allocatable arrays
-      call get_args('logicals',logicals)
+      ! call get_args('title',title) ! allocatable string
+      ! call get_args('point',point) ! allocatable arrays
+      ! call get_args('logicals',logicals)
        !
        ! less commonly ...
 
