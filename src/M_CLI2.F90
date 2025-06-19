@@ -3129,12 +3129,12 @@ character(len=*),intent(in)          :: keyword      ! keyword to retrieve value
 class(*)                             :: generic(:)
 character(len=*),intent(in),optional :: delimiters
    select type(generic)
-    type is (character(len=*));  call get_fixedarray_fixed_length_c(keyword,generic,delimiters)
-    type is (integer);           call get_fixedarray_i(keyword,generic,delimiters)
-    type is (real);              call get_fixedarray_r(keyword,generic,delimiters)
-    type is (complex);           call get_fixed_size_complex(keyword,generic,delimiters)
-    type is (real(kind=dp));     call get_fixedarray_d(keyword,generic,delimiters)
-    type is (logical);           call get_fixedarray_l(keyword,generic,delimiters)
+   !  type is (character(len=*));  call get_fixedarray_fixed_length_c(keyword,generic,delimiters)
+   !  type is (integer);           call get_fixedarray_i(keyword,generic,delimiters)
+   !  type is (real);              call get_fixedarray_r(keyword,generic,delimiters)
+   !  type is (complex);           call get_fixed_size_complex(keyword,generic,delimiters)
+   !  type is (real(kind=dp));     call get_fixedarray_d(keyword,generic,delimiters)
+   !  type is (logical);           call get_fixedarray_l(keyword,generic,delimiters)
     class default
       call mystop(-7,'*get_fixedarray_class* crud -- procedure does not know about this type')
    end select
