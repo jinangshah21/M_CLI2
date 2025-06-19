@@ -8,7 +8,8 @@ type point
    character(len=20) :: color='red'
 endtype point
 
-type(point) :: dot; namelist /nml_dot/ dot
+type(point) :: dot
+!  namelist /nml_dot/ dot
 
 character(len=:),allocatable :: name
 character(len=:),allocatable :: string
@@ -63,11 +64,11 @@ readme='&nml_dot dot='//string//'/'
 !'dot='//string//' ,', &
 !'/']
 
-read(readme,nml=nml_dot)
+! read(readme,nml=nml_dot)
 
-write(*,*)dot%x,dot%y,dot%color
-! or
-write(*,nml_dot)
+! write(*,*)dot%x,dot%y,dot%color
+! ! or
+! write(*,nml_dot)
 
 ! Hopefully it is obvious how the options can be read from values gotten
 ! with SGET(3f) and SGETS(3f) in this case, and with functions like IGET(3f)
