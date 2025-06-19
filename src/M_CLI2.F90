@@ -3888,6 +3888,7 @@ character(len=15)            :: frmt                         ! holds format buil
 character(len=256)           :: msg                          ! hold message from I/O errors
 integer                      :: intg
 integer                      :: pnd
+real                         :: pnd2
 integer                      :: basevalue, ivalu
 character(len=3),save        :: nan_string='NaN'
 !----------------------------------------------------------------------------------------------------------------------------------
@@ -3929,9 +3930,11 @@ character(len=3),save        :: nan_string='NaN'
       if(present(onerr))then
          select type(onerr)
          type is (integer)
-            valu=onerr
+            pnd=onerr
+            valu=pnd
          type is (real)
-            valu=onerr
+            pnd2=onerr
+            valu=pnd2
          type is (doubleprecision)
             valu=onerr
          end select
