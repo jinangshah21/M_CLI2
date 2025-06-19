@@ -3148,14 +3148,39 @@ end subroutine print_dictionary
 subroutine get_fixedarray_class(keyword,generic,delimiters)
 character(len=*),intent(in)          :: keyword      ! keyword to retrieve value from dictionary
 class(*)                             :: generic(:)
+integer, pointer :: tmp_int(:)
+real, pointer              :: tmp_real(:)
+complex, pointer           :: tmp_cmplx(:)
+real(dp), pointer          :: tmp_double(:)
+logical, pointer           :: tmp_logical(:)
+character(len=:), pointer  :: tmp_char(:) 
+integer :: n, i, l
 character(len=*),intent(in),optional :: delimiters
+n = size(generic)
    select type(generic)
-    type is (character(len=*));  call get_fixedarray_fixed_length_c(keyword,generic,delimiters)
-    type is (integer);           call get_fixedarray_i(keyword,generic,delimiters)
-    type is (real);              call get_fixedarray_r(keyword,generic,delimiters)
-    type is (complex);           call get_fixed_size_complex(keyword,generic,delimiters)
-    type is (real(kind=dp));     call get_fixedarray_d(keyword,generic,delimiters)
-    type is (logical);           call get_fixedarray_l(keyword,generic,delimiters)
+   ! type is (character(len=*))
+   !    tmp_char => generic
+   !    call get_fixedarray_fixed_length_c(keyword, tmp_char, delimiters)
+
+   type is (integer)
+      tmp_int => generic
+      call get_fixedarray_i(keyword, tmp_int, delimiters)
+
+   type is (real)
+      tmp_real => generic
+      call get_fixedarray_r(keyword, tmp_real, delimiters)
+
+   type is (complex)
+      tmp_cmplx => generic
+      call get_fixed_size_complex(keyword, tmp_cmplx, delimiters)
+
+   type is (real(kind=dp))
+      tmp_double => generic
+      call get_fixedarray_d(keyword, tmp_double, delimiters)
+
+   type is (logical)
+      tmp_logical => generic
+      call get_fixedarray_l(keyword, tmp_logical, delimiters)
     class default
       call mystop(-7,'*get_fixedarray_class* crud -- procedure does not know about this type')
    end select
