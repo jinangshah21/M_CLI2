@@ -3898,7 +3898,7 @@ character(len=3),save        :: nan_string='NaN'
    pnd=scan(local_chars,'#:')
    if(pnd /= 0)then
       write(frmt,fmt)pnd-1                                      ! build format of form '(BN,Gn.0)'
-      read(local_chars(:pnd-1),fmt=frmt,iostat=ierr,iomsg=msg)basevalue   ! try to read value from string
+      read(local_chars(:pnd-1),fmt=*,iostat=ierr,iomsg=msg)basevalue   ! try to read value from string
       if(decodebase(local_chars(pnd+1:),basevalue,ivalu))then
          valu=real(ivalu,kind=kind(0.0d0))
       else
@@ -3909,19 +3909,19 @@ character(len=3),save        :: nan_string='NaN'
       select case(local_chars(1:1))
       case('z','Z','h','H')                                     ! assume hexadecimal
          write(frmt,"('(Z',i0,')')")len(local_chars)
-         read(local_chars(2:),frmt,iostat=ierr,iomsg=msg)intg
+         read(local_chars(2:),*,iostat=ierr,iomsg=msg)intg
          valu=dble(intg)
       case('b','B')                                             ! assume binary (base 2)
          write(frmt,"('(B',i0,')')")len(local_chars)
-         read(local_chars(2:),frmt,iostat=ierr,iomsg=msg)intg
+         read(local_chars(2:),*,iostat=ierr,iomsg=msg)intg
          valu=dble(intg)
       case('o','O')                                             ! assume octal
          write(frmt,"('(O',i0,')')")len(local_chars)
-         read(local_chars(2:),frmt,iostat=ierr,iomsg=msg)intg
+         read(local_chars(2:),*,iostat=ierr,iomsg=msg)intg
          valu=dble(intg)
       case default
          write(frmt,fmt)len(local_chars)                        ! build format of form '(BN,Gn.0)'
-         read(local_chars,fmt=frmt,iostat=ierr,iomsg=msg)valu   ! try to read value from string
+         read(local_chars,fmt=*,iostat=ierr,iomsg=msg)valu   ! try to read value from string
       end select
    endif
    if(ierr /= 0)then                                            ! if an error occurred ierr will be non-zero.
@@ -3935,7 +3935,7 @@ character(len=3),save        :: nan_string='NaN'
             valu=onerr
          end select
       else                                                      ! set return value to NaN
-         read(nan_string,'(f3.3)')valu
+         read(nan_string,*)valu
       endif
       if(local_chars /= 'eod')then                           ! print warning message except for special value "eod"
          call journal('*a2d* - cannot produce number from string ['//trim(chars)//']', gx0, gx1, gx2, gx3, gx4, gx5, gx6, gx7, gx8, gx9, gxa, gxb, gxc, gxd, gxe, gxf, gxg, gxh, gxi)
