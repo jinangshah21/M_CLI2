@@ -5523,14 +5523,14 @@ use,intrinsic :: iso_fortran_env, only : real64
 character(len=*),intent(in)  :: name
 class(*),intent(out)         :: generic
    select type(generic)
-      type is (integer);                        call get_args(name,generic)
-      type is (real);                           call get_args(name,generic)
-      type is (real(kind=real64));              call get_args(name,generic)
-      type is (logical);                        call get_args(name,generic)
+      ! type is (integer);                        call get_args(name,generic)
+      ! type is (real);                           call get_args(name,generic)
+      ! type is (real(kind=real64));              call get_args(name,generic)
+      ! type is (logical);                        call get_args(name,generic)
       !x!type is (character(len=:),allocatable ::);   call get_args(name,generic)
       type is (character(len=*));
       call get_args_fixed_length(name,generic)
-      type is (complex);                        call get_args(name,generic)
+      ! type is (complex);                        call get_args(name,generic)
       class default
          stop 'unknown type in *get_generic*'
    end select
