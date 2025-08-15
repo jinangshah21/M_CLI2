@@ -2532,7 +2532,7 @@ character(len=:),allocatable :: current_argument
 character(len=:),allocatable :: current_argument_padded
 character(len=:),allocatable :: dummy
 character(len=:),allocatable :: oldvalue
-logical                      :: nomore
+logical                      :: nomore, tmp_next
 logical                      :: next_mandatory
    if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:START'
    G_RESPONSE_PREFIX=get_env('CLI_RESPONSE_PREFIX','@')
@@ -2547,7 +2547,8 @@ logical                      :: next_mandatory
       i=1
    endif
    current_argument=''
-   GET_ARGS: do while (get_next_argument()) ! insert and replace entries
+   tmp_next = get_next_argument()
+   GET_ARGS: do while (tmp_next) ! insert and replace entries
       if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:WHILE:CURRENT_ARGUMENT=',current_argument
 
       if( current_argument  ==  '-' .and. nomore .eqv. .true. )then   ! sort of
