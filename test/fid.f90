@@ -1,12 +1,12 @@
 program test_id
 use, intrinsic :: iso_fortran_env, only : compiler_version
-use, intrinsic :: iso_fortran_env, only : compiler_options
+! use, intrinsic :: iso_fortran_env, only : compiler_options
 implicit none
 character(len=:),allocatable :: version, options
 character(len=*),parameter   :: nl=new_line('a')
 integer                      :: where, start, break
    version=compiler_version()
-   options=' '//compiler_options()
+   options=' '
    start=1
    do 
       where=index(options(start:),' -')

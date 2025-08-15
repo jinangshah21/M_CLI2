@@ -40,10 +40,10 @@ integer :: i
 
    if(test)then
       write(*,it,advance='no')':ignorecase:',string,'passed'
-      write(*,it)(trim(arr(i)),i=1,size(arr))
+      ! write(*,it)(trim(arr(i)),i=1,size(arr))
    else
       write(*,it,advance='no')':ignorecase:',string,'failed'
-      write(*,it)(trim(arr(i)),i=1,size(arr))
+      ! write(*,it)(trim(arr(i)),i=1,size(arr))
       stop 1
    endif
 
