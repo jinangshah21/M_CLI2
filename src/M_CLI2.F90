@@ -2562,6 +2562,7 @@ logical                      :: next_mandatory
          if(G_remaining_option_allowed)then
             G_remaining_on=.true.
          endif
+         tmp_next = get_next_argument()
          cycle GET_ARGS
       endif
 
@@ -2579,6 +2580,7 @@ logical                      :: next_mandatory
             if(G_QUIET)then
                lastkeyword="UNKNOWN"
                pointer=0
+               tmp_next = get_next_argument()
                cycle GET_ARGS
             endif
             call print_dictionary('UNKNOWN LONG KEYWORD: '//current_argument)
@@ -2614,6 +2616,7 @@ logical                      :: next_mandatory
                   if(G_QUIET)then
                      lastkeyword="UNKNOWN"
                      pointer=0
+                     tmp_next = get_next_argument()
                      cycle GET_ARGS
                   endif
                   call mystop(2)
@@ -2625,6 +2628,7 @@ logical                      :: next_mandatory
             lastkeyword=""
             pointer=0
             if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:SHORT_END:2:'
+            tmp_next = get_next_argument()            
             cycle GET_ARGS
             !--------------
          elseif(pointer<0)then
@@ -2633,6 +2637,7 @@ logical                      :: next_mandatory
             if(G_QUIET)then
                lastkeyword="UNKNOWN"
                pointer=0
+               tmp_next = get_next_argument()
                cycle GET_ARGS
             endif
             call mystop(2)
@@ -2655,7 +2660,12 @@ logical                      :: next_mandatory
             imax=max(len(args),len(current_argument))
             args=[character(len=imax) :: args,current_argument]
          else
-            imax=max(len(unnamed),len(current_argument))
+            if (size(unnamed) == 0) then 
+               imax = 0
+            else 
+               imax=len(unnamed)
+            end if
+            imax=max(imax,len(current_argument))
             if(scan(current_argument//' ',G_RESPONSE_PREFIX) == 1.and.G_response)then
                if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:1:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                call expand_response(current_argument)
@@ -2683,7 +2693,12 @@ logical                      :: next_mandatory
                   imax=max(len(args),len(current_argument))
                   args=[character(len=imax) :: args,current_argument]
                else
-                  imax=max(len(unnamed),len(current_argument))
+                  if (size(unnamed) == 0) then 
+                     imax = 0
+                  else 
+                     imax=len(unnamed)
+                  end if
+                  imax=max(imax,len(current_argument))
                   if(scan(current_argument//' ',G_RESPONSE_PREFIX) == 1.and.G_response)then
                     if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:2:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                     call expand_response(current_argument)
@@ -2700,6 +2715,7 @@ logical                      :: next_mandatory
          next_mandatory=.false.
       endif
       if(CLI_AUTO_QUIET)CLI_AUTO_QUIET=.false.
+      tmp_next = get_next_argument()
    enddo GET_ARGS
    if(lastkeyword /= '')then
       call ifnull()
@@ -5116,7 +5132,11 @@ integer                      :: ii, end
    if(.not.allocated(list))then
       list=[character(len=2) :: ]
    endif
-   ii=len(list)
+   if (size(list) == 0) then 
+      ii = 0
+   else 
+      ii=len(list)
+   end if
    end=size(list)
    if(place <= 0.or.place > end)then                       ! index out of bounds of array
    elseif(place == end)then                                 ! remove from array
@@ -5274,14 +5294,19 @@ integer                      :: end
    if(.not.allocated(list))then
       list=[character(len=max(len_trim(value),2)) :: ]
    endif
+   if (size(list) == 0) then 
+      ii = 0
+   else 
+      ii=len(list)
+   end if
    tlen=len_trim(value)
    end=size(list)
    if(place < 0.or.place > end)then
            write(warn,*)'*replace_c* error: index out of range. end=',end,' index=',place
-   elseif(len_trim(value) <= len(list))then
+   elseif(len_trim(value) <= ii)then
       list(place)=value
    else  ! increase length of variable
-      ii=max(tlen,len(list))
+      ii=max(tlen,ii)
       kludge=[character(len=ii) :: list ]
       list=kludge
       list(place)=value
@@ -5428,8 +5453,12 @@ integer                      :: end
    if(.not.allocated(list))then
       list=[character(len=max(len_trim(value),2)) :: ]
    endif
-
-   ii=max(len_trim(value),len(list),2)
+   if (size(list) == 0) then 
+      ii = 0
+   else 
+      ii=len(list)
+   end if
+   ii=max(len_trim(value),ii,2)
    end=size(list)
 
    if(end == 0)then                                        ! empty array
