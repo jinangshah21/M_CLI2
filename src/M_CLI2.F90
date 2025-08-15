@@ -2532,7 +2532,7 @@ character(len=:),allocatable :: current_argument
 character(len=:),allocatable :: current_argument_padded
 character(len=:),allocatable :: dummy
 character(len=:),allocatable :: oldvalue
-logical                      :: nomore
+logical                      :: nomore, tmp_next
 logical                      :: next_mandatory
    if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:START'
    G_RESPONSE_PREFIX=get_env('CLI_RESPONSE_PREFIX','@')
@@ -2547,7 +2547,8 @@ logical                      :: next_mandatory
       i=1
    endif
    current_argument=''
-   GET_ARGS: do while (get_next_argument()) ! insert and replace entries
+   tmp_next = get_next_argument()
+   GET_ARGS: do while (tmp_next) ! insert and replace entries
       if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:WHILE:CURRENT_ARGUMENT=',current_argument
 
       if( current_argument  ==  '-' .and. nomore .eqv. .true. )then   ! sort of
@@ -2561,6 +2562,7 @@ logical                      :: next_mandatory
          if(G_remaining_option_allowed)then
             G_remaining_on=.true.
          endif
+         tmp_next = get_next_argument()
          cycle GET_ARGS
       endif
 
@@ -2578,6 +2580,7 @@ logical                      :: next_mandatory
             if(G_QUIET)then
                lastkeyword="UNKNOWN"
                pointer=0
+               tmp_next = get_next_argument()
                cycle GET_ARGS
             endif
             call print_dictionary('UNKNOWN LONG KEYWORD: '//current_argument)
@@ -2613,6 +2616,7 @@ logical                      :: next_mandatory
                   if(G_QUIET)then
                      lastkeyword="UNKNOWN"
                      pointer=0
+                     tmp_next = get_next_argument()
                      cycle GET_ARGS
                   endif
                   call mystop(2)
@@ -2624,6 +2628,7 @@ logical                      :: next_mandatory
             lastkeyword=""
             pointer=0
             if(G_DEBUG)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:SHORT_END:2:'
+            tmp_next = get_next_argument()            
             cycle GET_ARGS
             !--------------
          elseif(pointer<0)then
@@ -2632,6 +2637,7 @@ logical                      :: next_mandatory
             if(G_QUIET)then
                lastkeyword="UNKNOWN"
                pointer=0
+               tmp_next = get_next_argument()
                cycle GET_ARGS
             endif
             call mystop(2)
@@ -2699,6 +2705,7 @@ logical                      :: next_mandatory
          next_mandatory=.false.
       endif
       if(CLI_AUTO_QUIET)CLI_AUTO_QUIET=.false.
+      tmp_next = get_next_argument()
    enddo GET_ARGS
    if(lastkeyword /= '')then
       call ifnull()
