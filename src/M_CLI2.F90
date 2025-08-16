@@ -4180,10 +4180,10 @@ integer                       :: imax                   ! length of longest toke
       if(delimiters /= '')then                                       ! if DELIMITERS was specified and not null use it
          dlim=delimiters
       else                                                           ! DELIMITERS was specified on call as empty string
-         dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//char(0)//',:' ! use default delimiter when not specified
+         dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//',:' ! use default delimiter when not specified
       endif
    else                                                              ! no delimiter value was specified
-      dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//char(0)//',:'    ! use default delimiter when not specified
+      dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//',:'    ! use default delimiter when not specified
    endif
    idlim=len(dlim)                                                   ! dlim a lot of blanks on some machines if dlim is a big string
 !-----------------------------------------------------------------------------------------------------------------------------------
