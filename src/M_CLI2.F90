@@ -226,6 +226,12 @@ public                              :: set_args
 public                              :: get_subcommand
 public                              :: get_args
 public                              :: get_args_fixed_size
+public                              :: get_fixedarray_i
+public                              :: get_fixedarray_d
+public                              :: get_fixedarray_l
+public                              :: get_fixedarray_r
+public                              :: get_fixed_size_complex
+public                              :: get_args_fixed_length_scalar_c
 public                              :: get_args_fixed_length
 public                              :: specified
 public                              :: print_dictionary

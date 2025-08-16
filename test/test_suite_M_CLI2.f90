@@ -1,7 +1,6 @@
 program basic
 !! STACK OF TESTS -- some systems will have a limit on how much process spawning is allowed
-use M_CLI2,  only : set_args, get_args
-use M_CLI2,  only : get_args_fixed_length, get_args_fixed_size
+use M_CLI2
 implicit none
 
 integer                      :: casen=0
@@ -158,26 +157,26 @@ subroutine readcli()
    call get_args('y',y)
    call get_args('z',z)
    call get_args('ints',ints)
-   call get_args_fixed_size('ithree',ithree)
+   call get_fixedarray_i('ithree',ithree)
    ! logical
    call get_args('l_x',l_x)
    call get_args('l_y',l_y)
    call get_args('logicals',logicals)
-   call get_args_fixed_size('lfive',lfive)
+   call get_fixedarray_l('lfive',lfive)
    ! real
    call get_args('r_x',r_x)
    call get_args('r_y',r_y)
    call get_args('r_z',r_z)
    call get_args('reals',reals)
-   call get_args_fixed_size('rfour',rfour)
+   call get_fixedarray_r('rfour',rfour)
    ! character
-   call get_args_fixed_length('string',string)
+   call get_args_fixed_length_scalar_c('string',string)
    ! complex
    call get_args('c_x',c_x)
    call get_args('c_y',c_y)
    call get_args('c_z',c_z)
    call get_args('c_aarr',c_aarr)
-   call get_args_fixed_size('c_three',c_three)
+   call get_fixed_size_complex('c_three',c_three)
    !
    call get_args('casen',casen)
 end subroutine readcli
