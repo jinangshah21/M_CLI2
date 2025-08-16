@@ -3836,23 +3836,23 @@ contains
 subroutine print_generic(generic)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
+character(len=512) :: tmp_str
    select type(generic)
-      type is (integer(kind=int8));     write(local_line(istart:),'(i0)') generic
-      type is (integer(kind=int16));    write(local_line(istart:),'(i0)') generic
-      type is (integer(kind=int32));    write(local_line(istart:),'(i0)') generic
-      type is (integer(kind=int64));    write(local_line(istart:),'(i0)') generic
-      type is (real(kind=real32));      write(local_line(istart:),'(1pg0)') generic
+      type is (integer(kind=int8));     write(tmp_str,'(i0)') generic
+      type is (integer(kind=int16));    write(tmp_str,'(i0)') generic
+      type is (integer(kind=int32));    write(tmp_str,'(i0)') generic
+      type is (integer(kind=int64));    write(tmp_str,'(i0)') generic
+      type is (real(kind=real32));      write(tmp_str,'(1pg0)') generic
       type is (real(kind=real64))
-         write(local_line(istart:),'(1pg0)') generic
+         write(tmp_str,'(1pg0)') generic
       !x! DOES NOT WORK WITH NVFORTRAN: type is (real(kind=real128));     write(local_line(istart:),'(1pg0)') generic
       type is (logical)
-         write(local_line(istart:),'(l1)') generic
+         write(tmp_str,'(l1)') generic
       type is (character(len=*))
-         write(local_line(istart:),'(a)') generic
-      type is (complex);                write(local_line(istart:),'("(",1pg0,",",1pg0,")")') generic
+         write(tmp_str,'(a)') generic
+      type is (complex);                write(tmp_str,'("(",1pg0,",",1pg0,")")') generic
    end select
-   istart=len_trim(local_line)+increment
-   local_line=trim(local_line)//sep_local
+   local_line=trim(local_line)//trim(tmp_str)//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end subroutine journal
