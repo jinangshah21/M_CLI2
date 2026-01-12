@@ -3148,9 +3148,12 @@ end subroutine print_dictionary
 subroutine get_fixedarray_class(keyword,generic,delimiters)
 character(len=*),intent(in)          :: keyword      ! keyword to retrieve value from dictionary
 class(*)                             :: generic(:)
+character(len=:), pointer  :: tmp_char(:)
 character(len=*),intent(in),optional :: delimiters
    select type(generic)
-    type is (character(len=*));  call get_fixedarray_fixed_length_c(keyword,generic,delimiters)
+   type is (character(len=*))
+      tmp_char => generic
+      call get_fixedarray_fixed_length_c(keyword, tmp_char, delimiters)
     type is (integer);           call get_fixedarray_i(keyword,generic,delimiters)
     type is (real);              call get_fixedarray_r(keyword,generic,delimiters)
     type is (complex);           call get_fixed_size_complex(keyword,generic,delimiters)
